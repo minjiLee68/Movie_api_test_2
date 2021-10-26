@@ -24,7 +24,7 @@ class MovieListActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btn.setOnClickListener {
-            getRetrofitResponse()
+            getRetrofitResponseAccordingToID()
         }
     }
 
@@ -34,7 +34,7 @@ class MovieListActivity : AppCompatActivity() {
         val reponseCall: Call<MovieSearchResponse> = movieApi
             .searchMovie(
                 Credentials.API_KEY,
-                "Jack Reacher",
+                "Action",
                 "1"
             )
 
@@ -44,22 +44,53 @@ class MovieListActivity : AppCompatActivity() {
                 call: Call<MovieSearchResponse>,
                 response: Response<MovieSearchResponse>
             ) {
-                if ( response.isSuccessful ) {
-                    Log.d("TAG--","the response:${response.body().toString()}")
+                if (response.isSuccessful) {
+//                    Log.d("TAG--","the response:${response.body().toString()}")
 
                     val movies: List<MovieModel> = ArrayList(response.body()!!.movies)
 
                     for (movie: MovieModel in movies) {
-                        Log.d("TAG--","The release date:${movie.release_date}")
+                        Log.d("TAG--", "Name: ${movie.title}")
                     }
                 } else {
                     try {
-                        Log.d("TAG--","Error:${response.errorBody()?.string()}")
-                    } catch (e: IOException) { e.printStackTrace() }
+                        Log.d("TAG--", "Error:${response.errorBody()?.string()}")
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
                 }
             }
 
             override fun onFailure(call: Call<MovieSearchResponse>, t: Throwable) {
+
+            }
+
+        })
+    }
+
+    private fun getRetrofitResponseAccordingToID() {
+        val movieApi: MovieApi = Service.getMovieApi()
+        val responseCall: Call<MovieModel> = movieApi
+            .getMovie(
+                438631,
+                Credentials.API_KEY
+            )
+
+        responseCall.enqueue(object : Callback<MovieModel> {
+            override fun onResponse(call: Call<MovieModel>, response: Response<MovieModel>) {
+                if (response.isSuccessful) {
+                    val movie: MovieModel = response.body()!!
+                    Log.d("Tag", "The Response: ${movie.title}")
+                } else {
+                    try {
+                        Log.d("Tag", "Error: ${response.errorBody()?.string()}")
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<MovieModel>, t: Throwable) {
 
             }
 
