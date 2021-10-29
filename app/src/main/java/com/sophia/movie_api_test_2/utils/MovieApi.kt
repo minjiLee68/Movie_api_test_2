@@ -15,7 +15,7 @@ interface MovieApi {
     fun searchMovie(
         @Query("api_key") key: String,
         @Query("query") query: String,
-        @Query("page") page: String
+        @Query("page") page: Int
     ): Call<MovieSearchResponse>
 
      // id로 검색 표시

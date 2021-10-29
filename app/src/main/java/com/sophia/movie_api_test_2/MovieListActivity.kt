@@ -36,7 +36,6 @@ class MovieListActivity : AppCompatActivity() {
         movieListViewModel.getMovies().observe(this, {
 
 
-
         })
     }
 
@@ -47,7 +46,7 @@ class MovieListActivity : AppCompatActivity() {
             .searchMovie(
                 Credentials.API_KEY,
                 "Action",
-                "1"
+                1
             )
 
         reponseCall.enqueue(object : Callback<MovieSearchResponse> {
