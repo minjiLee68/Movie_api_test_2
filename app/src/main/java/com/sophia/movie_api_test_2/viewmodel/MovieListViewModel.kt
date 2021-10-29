@@ -1,14 +1,14 @@
 package com.sophia.movie_api_test_2.viewmodel
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sophia.movie_api_test_2.models.MovieModel
+import com.sophia.movie_api_test_2.repository.MovieRepository
 
 class MovieListViewModel: ViewModel() {
 
-    private val mMovie = MutableLiveData<List<MovieModel>>()
-    val getMovies: LiveData<List<MovieModel>>
-        get() = mMovie
+    private val movieRepository: MovieRepository = MovieRepository.getInstance()
+
+    fun getMovies(): LiveData<List<MovieModel>> = movieRepository.getMovies()
 
 }

@@ -33,7 +33,8 @@ class MovieListActivity : AppCompatActivity() {
     }
     // Observing any data change = 모든 데이터 변경 관찰
     private fun observeAnyChange() {
-        movieListViewModel.getMovies.observe(this, {
+        movieListViewModel.getMovies().observe(this, {
+
 
 
         })
