@@ -3,12 +3,15 @@ package com.sophia.movie_api_test_2
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import com.sophia.movie_api_test_2.databinding.ActivityMainBinding
 import com.sophia.movie_api_test_2.models.MovieModel
 import com.sophia.movie_api_test_2.reponse.MovieSearchResponse
 import com.sophia.movie_api_test_2.request.Service
 import com.sophia.movie_api_test_2.utils.Credentials
 import com.sophia.movie_api_test_2.utils.MovieApi
+import com.sophia.movie_api_test_2.viewmodel.MovieListViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,14 +21,22 @@ class MovieListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+    //ViewModel
+    private lateinit var movieListViewModel: MovieListViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.btn.setOnClickListener {
-            getRetrofitResponseAccordingToID()
-        }
+        movieListViewModel = ViewModelProvider(this)[MovieListViewModel::class.java]
+    }
+    // Observing any data change = 모든 데이터 변경 관찰
+    private fun observeAnyChange() {
+        movieListViewModel.getMovies.observe(this, {
+
+
+        })
     }
 
     private fun getRetrofitResponse() {
@@ -97,3 +108,4 @@ class MovieListActivity : AppCompatActivity() {
         })
     }
 }
+
