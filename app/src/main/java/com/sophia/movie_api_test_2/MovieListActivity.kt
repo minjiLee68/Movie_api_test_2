@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.get
 import com.sophia.movie_api_test_2.databinding.ActivityMainBinding
 import com.sophia.movie_api_test_2.models.MovieModel
 import com.sophia.movie_api_test_2.reponse.MovieSearchResponse
@@ -30,13 +29,28 @@ class MovieListActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         movieListViewModel = ViewModelProvider(this)[MovieListViewModel::class.java]
+
+        observeAnyChange()
+
+        binding.btn.setOnClickListener {
+            searchMovieApi("fast", 1)
+        }
     }
     // Observing any data change = 모든 데이터 변경 관찰
     private fun observeAnyChange() {
         movieListViewModel.getMovies().observe(this, {
 
+            if (it != null) {
+                for (movieModel: MovieModel in it) {
+                    //Get the data in log
+                    Log.v("Tag","onChanged: ${movieModel.title}")
+                }
+            }
 
         })
+    }
+    private fun searchMovieApi(query: String, pageNumber: Int) {
+        movieListViewModel.searchMovieApi(query, pageNumber)
     }
 
     private fun getRetrofitResponse() {

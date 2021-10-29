@@ -1,18 +1,14 @@
 package com.sophia.movie_api_test_2
 
-import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 
 class AppExecutors {
     //Pattern
     companion object {
-        private lateinit var instance: AppExecutors
+        private val instance: AppExecutors = AppExecutors()
 
         fun getInstance(): AppExecutors {
-            if (instance == null) {
-                instance = AppExecutors()
-            }
             return instance
         }
     }

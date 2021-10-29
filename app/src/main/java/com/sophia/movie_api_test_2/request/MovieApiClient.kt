@@ -1,5 +1,6 @@
 package com.sophia.movie_api_test_2.request
 
+import android.annotation.SuppressLint
 import android.util.Log
 import com.sophia.movie_api_test_2.utils.Credentials
 import androidx.lifecycle.LiveData
@@ -16,39 +17,47 @@ class MovieApiClient {
 
     fun getMovies(): LiveData<List<MovieModel>> = mMovies
 
+    private var moviesRunnable: RetrieveMoviesRunnable? = null
+
     companion object {
-        private lateinit var instance: MovieApiClient
+        private val instance: MovieApiClient = MovieApiClient()
 
         fun getInstance(): MovieApiClient {
-            if (instance == null) {
-                instance = MovieApiClient()
-            }
             return instance
         }
     }
 
-    fun searchMoviesApi() {
-        val myHandler = AppExecutors.getInstance().networkIO().submit()
+    fun searchMoviesApi(query: String, pageNumber: Int) {
+
+        if (moviesRunnable != null) {
+            moviesRunnable = null
+        }
+
+        moviesRunnable = RetrieveMoviesRunnable(query, pageNumber)
+
+        val myHandler = AppExecutors.getInstance().networkIO().submit(moviesRunnable)
 
         AppExecutors.getInstance().networkIO().schedule({
 
             myHandler.cancel(true)
 
-        }, 4000, TimeUnit.MICROSECONDS)
+        }, 5000, TimeUnit.MILLISECONDS)
     }
 
     inner class RetrieveMoviesRunnable(
         private var query: String,
         private var pageNumber: Int,
-        private var cancelRequest: Boolean
     ) : Runnable {
+
+        private var cancelRequest: Boolean = false
 
         fun retrieveMoviesRunnable(query: String, pageNumber: Int) {
             this.query = query
             this.pageNumber = pageNumber
-            cancelRequest = false
+            cancelRequest
         }
 
+        @SuppressLint("NullSafeMutableLiveData")
         override fun run() {
             try {
                 val response = getMovies(query, pageNumber).execute()
@@ -63,8 +72,14 @@ class MovieApiClient {
                         // setValue: 배경 스레드가 아님
                         mMovies.postValue(list)
                     } else {
-
+                        val currentMovies: ArrayList<MovieModel> = mMovies.value as ArrayList<MovieModel>
+                        currentMovies.addAll(list)
+                        mMovies.postValue(currentMovies)
                     }
+                } else {
+                    val error = response.errorBody()?.string()
+                    Log.v("Tag","Error $error")
+                    mMovies.postValue(null)
                 }
             } catch (e: IOException) {
                 e.printStackTrace()

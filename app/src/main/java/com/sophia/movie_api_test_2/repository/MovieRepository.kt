@@ -12,15 +12,16 @@ class MovieRepository {
     fun getMovies(): LiveData<List<MovieModel>> = movieApiClient.getMovies()
 
     companion object {
-        private lateinit var instance: MovieRepository
+        private val instance: MovieRepository = MovieRepository()
 
         @JvmName("getInstance1")
         fun getInstance(): MovieRepository {
-            if (instance == null ){
-                instance = MovieRepository()
-            }
             return instance
         }
+    }
+
+    fun searchMovieApi(query: String, pageNumber: Int) {
+        movieApiClient.searchMoviesApi(query, pageNumber)
     }
 
 }
