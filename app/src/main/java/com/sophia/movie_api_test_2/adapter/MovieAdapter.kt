@@ -35,6 +35,16 @@ class MovieAdapter(
         notifyDataSetChanged()
     }
 
+    //클릭한 영화의 id 얻기
+    fun getSelectedMovie(position: Int): MovieModel? {
+        if (mMovies != null) {
+            if (mMovies.isNotEmpty()) {
+                return mMovies[position]
+            }
+        }
+        return null
+    }
+
 }
 
 class MovieViewHolder(

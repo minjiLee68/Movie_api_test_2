@@ -1,5 +1,6 @@
 package com.sophia.movie_api_test_2
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -146,6 +147,9 @@ class MovieListActivity : AppCompatActivity(), OnMovieListener {
 
     override fun onMovieClick(position: Int) {
         //Toast.makeText(this, "The Position $position",Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, MovieDetails::class.java)
+        intent.putExtra("movie",movieAdapter.getSelectedMovie(position))
+        startActivity(intent)
     }
 
     override fun onCategoryClick(category: String) {

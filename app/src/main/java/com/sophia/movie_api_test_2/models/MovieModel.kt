@@ -1,6 +1,7 @@
 package com.sophia.movie_api_test_2.models
 
 import android.os.Parcelable
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
@@ -11,6 +12,8 @@ data class MovieModel (
     val release_date: String?,
     val movie_id: Int?,
     val vote_average: Float?,
+    @SerializedName("overview")
+    @Expose
     val movie_overview: String?,
     val original_language: String?
 ): Parcelable
