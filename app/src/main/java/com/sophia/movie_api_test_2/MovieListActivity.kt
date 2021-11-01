@@ -28,6 +28,7 @@ class MovieListActivity : AppCompatActivity(), OnMovieListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var movieAdapter: MovieAdapter
     private var movies: List<MovieModel> = ArrayList()
+    private var isPopular: Boolean = true
 
     //ViewModel
     private lateinit var movieListViewModel: MovieListViewModel
@@ -45,13 +46,28 @@ class MovieListActivity : AppCompatActivity(), OnMovieListener {
         setupSearchView()
         configureRecyclerView()
         observeAnyChange()
+        observePopularMovies()
+
+        movieListViewModel.searchMoviePop(1)
     }
+
+    private fun observePopularMovies() {
+
+        movieListViewModel.getPop().observe(this, {
+            if (it != null) {
+                for (movieModel: MovieModel in it) {
+                    movieAdapter.setMovies(it)
+                }
+            }
+        })
+
+    }
+
     // Observing any data change = 모든 데이터 변경 관찰
     private fun observeAnyChange() {
         movieListViewModel.getMovies().observe(this, {
             if (it != null) {
                 for (movieModel: MovieModel in it) {
-                    Log.d("Tag","onChanged: ${movieModel.title}")
                     movieAdapter.setMovies(it)
                 }
             }
@@ -64,7 +80,7 @@ class MovieListActivity : AppCompatActivity(), OnMovieListener {
     private fun configureRecyclerView() {
         movieAdapter = MovieAdapter(movies,this)
         binding.recyclerView.adapter = movieAdapter
-        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false)
 
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -172,6 +188,10 @@ class MovieListActivity : AppCompatActivity(), OnMovieListener {
             }
 
         })
+
+        searchView.setOnSearchClickListener {
+            isPopular = false
+        }
     }
 }
 

@@ -9,6 +9,9 @@ import com.bumptech.glide.Glide
 import com.sophia.movie_api_test_2.databinding.MovieListItemBinding
 import com.sophia.movie_api_test_2.models.MovieModel
 
+const val DISPLAY_POP = 1
+const val DISPLAY_SEARCH = 2
+
 class MovieAdapter(
     private var mMovies: List<MovieModel>,
     private val onMovieListener: OnMovieListener
@@ -54,9 +57,6 @@ class MovieViewHolder(
 
     fun bind(movies: MovieModel) {
         binding.apply {
-            movieTitle.text = movies.title
-            movieCategory.text = movies.release_date
-            movieDuration.text = movies.original_language
             //투표 평균이 10 이상이고 ratingBar가 별 5 개 이상: 2로 나누기
             ratingBar.rating = movies.vote_average!! /2
             //ImageView: Glide Library

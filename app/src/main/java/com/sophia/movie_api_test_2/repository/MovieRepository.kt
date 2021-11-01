@@ -13,6 +13,7 @@ class MovieRepository {
     private var mPageNumber: Int = 0
 
     fun getMovies(): LiveData<List<MovieModel>> = movieApiClient.getMovies()
+    fun getMoviesPop(): LiveData<List<MovieModel>> = movieApiClient.getMoviesPop()
 
     companion object {
         private val instance: MovieRepository = MovieRepository()
@@ -26,6 +27,11 @@ class MovieRepository {
         mQuery = query
         mPageNumber = pageNumber
         movieApiClient.searchMoviesApi(query, pageNumber)
+    }
+
+    fun searchMoviePop(pageNumber: Int) {
+        mPageNumber = pageNumber
+        movieApiClient.searchMoviesApiPop(pageNumber)
     }
 
     fun searchNextPage() {
