@@ -14,7 +14,6 @@ class MovieRepository {
     companion object {
         private val instance: MovieRepository = MovieRepository()
 
-        @JvmName("getInstance1")
         fun getInstance(): MovieRepository {
             return instance
         }
