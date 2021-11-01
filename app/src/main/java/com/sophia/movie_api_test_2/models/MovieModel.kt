@@ -10,5 +10,6 @@ data class MovieModel (
     val release_date: String?,
     val movie_id: Int?,
     val vote_average: Float?,
-    val movie_overview: String?
+    val movie_overview: String?,
+    val runtime: Int?
 ): Parcelable

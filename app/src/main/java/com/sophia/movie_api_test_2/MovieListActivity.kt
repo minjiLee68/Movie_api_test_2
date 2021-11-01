@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.sophia.movie_api_test_2.adapter.MovieAdapter
+import com.sophia.movie_api_test_2.adapter.OnMovieListener
 import com.sophia.movie_api_test_2.databinding.ActivityMainBinding
 import com.sophia.movie_api_test_2.models.MovieModel
 import com.sophia.movie_api_test_2.reponse.MovieSearchResponse
@@ -16,9 +19,11 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-class MovieListActivity : AppCompatActivity() {
+class MovieListActivity : AppCompatActivity(), OnMovieListener {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var movieAdapter: MovieAdapter
+    private lateinit var movies: List<MovieModel>
 
     //ViewModel
     private lateinit var movieListViewModel: MovieListViewModel
@@ -31,26 +36,27 @@ class MovieListActivity : AppCompatActivity() {
         movieListViewModel = ViewModelProvider(this)[MovieListViewModel::class.java]
 
         observeAnyChange()
-
-        binding.btn.setOnClickListener {
-            searchMovieApi("fast", 1)
-        }
+        configureRecyclerView()
     }
     // Observing any data change = 모든 데이터 변경 관찰
     private fun observeAnyChange() {
         movieListViewModel.getMovies().observe(this, {
-
             if (it != null) {
                 for (movieModel: MovieModel in it) {
-                    //Get the data in log
-                    Log.v("Tag","onChanged: ${movieModel.title}")
+                    Log.d("Tag","onChanged: ${movieModel.title}")
+                    movieAdapter.setMovies(it)
                 }
             }
-
         })
     }
     private fun searchMovieApi(query: String, pageNumber: Int) {
         movieListViewModel.searchMovieApi(query, pageNumber)
+    }
+
+    private fun configureRecyclerView() {
+        movieAdapter = MovieAdapter(movies,this)
+        binding.recyclerView.adapter = movieAdapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
     }
 
     private fun getRetrofitResponse() {
@@ -120,6 +126,14 @@ class MovieListActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    override fun onMovieClick(position: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onCategoryClick(category: String) {
+        TODO("Not yet implemented")
     }
 }
 
