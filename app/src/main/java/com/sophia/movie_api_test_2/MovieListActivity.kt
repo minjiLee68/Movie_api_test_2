@@ -3,8 +3,11 @@ package com.sophia.movie_api_test_2
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.sophia.movie_api_test_2.adapter.MovieAdapter
 import com.sophia.movie_api_test_2.adapter.OnMovieListener
 import com.sophia.movie_api_test_2.databinding.ActivityMainBinding
@@ -33,11 +36,14 @@ class MovieListActivity : AppCompatActivity(), OnMovieListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //Toolbar
         movieListViewModel = ViewModelProvider(this)[MovieListViewModel::class.java]
+        setSupportActionBar(binding.toolbar)
 
+        //searchView
+        setupSearchView()
         configureRecyclerView()
         observeAnyChange()
-        searchMovieApi("fast",1)
     }
     // Observing any data change = 모든 데이터 변경 관찰
     private fun observeAnyChange() {
@@ -50,14 +56,23 @@ class MovieListActivity : AppCompatActivity(), OnMovieListener {
             }
         })
     }
-    private fun searchMovieApi(query: String, pageNumber: Int) {
-        movieListViewModel.searchMovieApi(query, pageNumber)
-    }
+//    private fun searchMovieApi(query: String, pageNumber: Int) {
+//        movieListViewModel.searchMovieApi(query, pageNumber)
+//    }
 
     private fun configureRecyclerView() {
         movieAdapter = MovieAdapter(movies,this)
         binding.recyclerView.adapter = movieAdapter
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
+
+        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                if (!recyclerView.canScrollVertically(1)) {
+                    //여기에서 api의 다음 페이지에 다음 검색 결과를 표시
+                    movieListViewModel.searchNextPage()
+                }
+            }
+        })
     }
 
     private fun getRetrofitResponse() {
@@ -130,11 +145,29 @@ class MovieListActivity : AppCompatActivity(), OnMovieListener {
     }
 
     override fun onMovieClick(position: Int) {
-        TODO("Not yet implemented")
+        //Toast.makeText(this, "The Position $position",Toast.LENGTH_SHORT).show()
     }
 
     override fun onCategoryClick(category: String) {
-        TODO("Not yet implemented")
+
+    }
+
+    //Get data from searchview & query the api to get the results
+    private fun setupSearchView() {
+        val searchView = binding.searchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null) {
+                    movieListViewModel.searchMovieApi(query,1)
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+
+        })
     }
 }
 

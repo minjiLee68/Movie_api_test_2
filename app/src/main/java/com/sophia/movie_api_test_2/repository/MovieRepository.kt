@@ -9,6 +9,9 @@ class MovieRepository {
 
     private val movieApiClient: MovieApiClient = MovieApiClient.getInstance()
 
+    private lateinit var mQuery: String
+    private var mPageNumber: Int = 0
+
     fun getMovies(): LiveData<List<MovieModel>> = movieApiClient.getMovies()
 
     companion object {
@@ -20,7 +23,13 @@ class MovieRepository {
     }
 
     fun searchMovieApi(query: String, pageNumber: Int) {
+        mQuery = query
+        mPageNumber = pageNumber
         movieApiClient.searchMoviesApi(query, pageNumber)
+    }
+
+    fun searchNextPage() {
+        searchMovieApi(mQuery,mPageNumber+1)
     }
 
 }

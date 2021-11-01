@@ -15,4 +15,8 @@ class MovieListViewModel: ViewModel() {
         movieRepository.searchMovieApi(query, pageNumber)
     }
 
+    fun searchNextPage() {
+        movieRepository.searchNextPage()
+    }
+
 }

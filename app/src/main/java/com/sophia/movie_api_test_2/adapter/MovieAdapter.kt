@@ -40,22 +40,21 @@ class MovieAdapter(
 class MovieViewHolder(
     private val binding: MovieListItemBinding,
     private val onMovieListener: OnMovieListener
-) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(movies: MovieModel) {
         binding.apply {
             movieTitle.text = movies.title
             movieCategory.text = movies.release_date
-            movieDuration.text = movies.runtime.toString()
+            movieDuration.text = movies.original_language
             //투표 평균이 10 이상이고 ratingBar가 별 5 개 이상: 2로 나누기
             ratingBar.rating = movies.vote_average!! /2
             //ImageView: Glide Library
             Glide.with(itemView).load("https://image.tmdb.org/t/p/w500/${movies.poster_path}").into(movieImg)
-        }
-    }
 
-    override fun onClick(v: View) {
-        v.setOnClickListener(this)
-        onMovieListener.onMovieClick(bindingAdapterPosition)
+            root.setOnClickListener {
+                onMovieListener.onMovieClick(bindingAdapterPosition)
+            }
+        }
     }
 }
