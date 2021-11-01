@@ -23,7 +23,7 @@ class MovieListActivity : AppCompatActivity(), OnMovieListener {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var movieAdapter: MovieAdapter
-    private lateinit var movies: List<MovieModel>
+    private var movies: List<MovieModel> = ArrayList()
 
     //ViewModel
     private lateinit var movieListViewModel: MovieListViewModel
@@ -35,8 +35,9 @@ class MovieListActivity : AppCompatActivity(), OnMovieListener {
 
         movieListViewModel = ViewModelProvider(this)[MovieListViewModel::class.java]
 
-        observeAnyChange()
         configureRecyclerView()
+        observeAnyChange()
+        searchMovieApi("fast",1)
     }
     // Observing any data change = 모든 데이터 변경 관찰
     private fun observeAnyChange() {

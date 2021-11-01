@@ -50,7 +50,7 @@ class MovieViewHolder(
             //투표 평균이 10 이상이고 ratingBar가 별 5 개 이상: 2로 나누기
             ratingBar.rating = movies.vote_average!! /2
             //ImageView: Glide Library
-            Glide.with(itemView).load(movies).into(movieImg)
+            Glide.with(itemView).load("https://image.tmdb.org/t/p/w500/${movies.poster_path}").into(movieImg)
         }
     }
 
