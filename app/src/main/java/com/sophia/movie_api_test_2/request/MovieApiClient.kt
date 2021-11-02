@@ -11,7 +11,6 @@ import com.sophia.movie_api_test_2.reponse.MovieSearchResponse
 import retrofit2.Call
 import retrofit2.Response
 import java.io.IOException
-import java.util.concurrent.Future
 import java.util.concurrent.TimeUnit
 
 class MovieApiClient {

@@ -1,7 +1,6 @@
 package com.sophia.movie_api_test_2.repository
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.sophia.movie_api_test_2.models.MovieModel
 import com.sophia.movie_api_test_2.request.MovieApiClient
 
@@ -9,7 +8,7 @@ class MovieRepository {
 
     private val movieApiClient: MovieApiClient = MovieApiClient.getInstance()
 
-    private lateinit var mQuery: String
+    private var mQuery = ""
     private var mPageNumber: Int = 0
 
     fun getMovies(): LiveData<List<MovieModel>> = movieApiClient.getMovies()

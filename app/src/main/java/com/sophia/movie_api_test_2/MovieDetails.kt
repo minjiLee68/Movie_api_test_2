@@ -2,11 +2,9 @@ package com.sophia.movie_api_test_2
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import com.bumptech.glide.Glide
 import com.sophia.movie_api_test_2.databinding.ActivityMovieDetailsBinding
 import com.sophia.movie_api_test_2.models.MovieModel
-import kotlinx.android.synthetic.main.movie_list_item.*
 
 class MovieDetails : AppCompatActivity() {
 
